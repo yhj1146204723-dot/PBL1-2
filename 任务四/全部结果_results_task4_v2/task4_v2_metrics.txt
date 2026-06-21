@@ -1,0 +1,251 @@
+任务4：多手势运动连续神经解码 v2（两阶段伪在线版）
+==========================================================================================
+DATA_ROOT: C:\\Users\\dsmji\\Desktop\\SCNS\\1\\PBL2026_Data\\data\\hand-gesture
+Train trials: 960
+Val trials:   270
+Test trials:  330
+Test windows: 49830
+Feature dim:  160
+WIN_LEN=0.5s, STEP=0.05s, N_HIST=4
+BANDS={'beta_13_30': (13, 30), 'low_gamma_30_50': (30, 50), 'high_gamma_50_100': (50, 100), 'broad_high_gamma_50_150': (50, 150)}
+EXTEND_AS_REST=True
+GESTURE_MODEL=rf
+movement_threshold=0.50
+
+一、7类连续解码指标：rest + 6 gestures
+- raw prediction:
+  Accuracy:          0.3681
+  Balanced Accuracy: 0.2310
+              precision    recall  f1-score   support
+
+        rest       0.63      0.60      0.62     23430
+       grasp       0.17      0.09      0.12      5600
+     scissor       0.21      0.14      0.17      5600
+         six       0.19      0.16      0.17      5600
+       thumb       0.14      0.19      0.16      3200
+       index       0.15      0.17      0.16      3200
+       seven       0.10      0.26      0.15      3200
+
+    accuracy                           0.37     49830
+   macro avg       0.23      0.23      0.22     49830
+weighted avg       0.39      0.37      0.37     49830
+
+- smoothed prediction:
+  Accuracy:          0.3820
+  Balanced Accuracy: 0.2373
+              precision    recall  f1-score   support
+
+        rest       0.62      0.63      0.63     23430
+       grasp       0.16      0.07      0.10      5600
+     scissor       0.22      0.13      0.17      5600
+         six       0.21      0.17      0.19      5600
+       thumb       0.16      0.20      0.18      3200
+       index       0.18      0.17      0.17      3200
+       seven       0.11      0.28      0.15      3200
+
+    accuracy                           0.38     49830
+   macro avg       0.24      0.24      0.23     49830
+weighted avg       0.39      0.38      0.38     49830
+
+
+二、二分类运动状态检测指标：rest/open vs movement
+  Accuracy:          0.6472
+  Balanced Accuracy: 0.6449
+  F1 movement:       0.6729
+              precision    recall  f1-score   support
+
+   rest/open       0.63      0.60      0.62     23430
+    movement       0.66      0.68      0.67     26400
+
+    accuracy                           0.65     49830
+   macro avg       0.65      0.64      0.65     49830
+weighted avg       0.65      0.65      0.65     49830
+
+
+三、Movement-only 6类手势识别指标（只在真实 movement 窗口统计）
+  Accuracy:          0.2303
+  Balanced Accuracy: 0.2613
+              precision    recall  f1-score   support
+
+       grasp       0.23      0.11      0.14      5600
+     scissor       0.30      0.16      0.21      5600
+         six       0.26      0.18      0.21      5600
+       thumb       0.25      0.46      0.33      3200
+       index       0.24      0.34      0.28      3200
+       seven       0.15      0.32      0.21      3200
+
+    accuracy                           0.23     26400
+   macro avg       0.24      0.26      0.23     26400
+weighted avg       0.25      0.23      0.22     26400
+
+
+四、7类 smoothed 混淆矩阵
+[[14823   746  1089  1376  1405  1136  2855]
+ [ 1761   419   533   873   552   173  1289]
+ [ 1645   255   750   681   493   403  1373]
+ [ 1598   378   440   976   426   250  1532]
+ [ 1607   269   104   155   641   231   193]
+ [ 1304   282   242   264   344   535   229]
+ [ 1071   203   310   320   175   232   889]]
+
+五、特征名称
+t-4step_beta_13_30_ch1
+t-4step_beta_13_30_ch2
+t-4step_beta_13_30_ch3
+t-4step_beta_13_30_ch4
+t-4step_beta_13_30_ch5
+t-4step_beta_13_30_ch6
+t-4step_beta_13_30_ch7
+t-4step_beta_13_30_ch8
+t-4step_low_gamma_30_50_ch1
+t-4step_low_gamma_30_50_ch2
+t-4step_low_gamma_30_50_ch3
+t-4step_low_gamma_30_50_ch4
+t-4step_low_gamma_30_50_ch5
+t-4step_low_gamma_30_50_ch6
+t-4step_low_gamma_30_50_ch7
+t-4step_low_gamma_30_50_ch8
+t-4step_high_gamma_50_100_ch1
+t-4step_high_gamma_50_100_ch2
+t-4step_high_gamma_50_100_ch3
+t-4step_high_gamma_50_100_ch4
+t-4step_high_gamma_50_100_ch5
+t-4step_high_gamma_50_100_ch6
+t-4step_high_gamma_50_100_ch7
+t-4step_high_gamma_50_100_ch8
+t-4step_broad_high_gamma_50_150_ch1
+t-4step_broad_high_gamma_50_150_ch2
+t-4step_broad_high_gamma_50_150_ch3
+t-4step_broad_high_gamma_50_150_ch4
+t-4step_broad_high_gamma_50_150_ch5
+t-4step_broad_high_gamma_50_150_ch6
+t-4step_broad_high_gamma_50_150_ch7
+t-4step_broad_high_gamma_50_150_ch8
+t-3step_beta_13_30_ch1
+t-3step_beta_13_30_ch2
+t-3step_beta_13_30_ch3
+t-3step_beta_13_30_ch4
+t-3step_beta_13_30_ch5
+t-3step_beta_13_30_ch6
+t-3step_beta_13_30_ch7
+t-3step_beta_13_30_ch8
+t-3step_low_gamma_30_50_ch1
+t-3step_low_gamma_30_50_ch2
+t-3step_low_gamma_30_50_ch3
+t-3step_low_gamma_30_50_ch4
+t-3step_low_gamma_30_50_ch5
+t-3step_low_gamma_30_50_ch6
+t-3step_low_gamma_30_50_ch7
+t-3step_low_gamma_30_50_ch8
+t-3step_high_gamma_50_100_ch1
+t-3step_high_gamma_50_100_ch2
+t-3step_high_gamma_50_100_ch3
+t-3step_high_gamma_50_100_ch4
+t-3step_high_gamma_50_100_ch5
+t-3step_high_gamma_50_100_ch6
+t-3step_high_gamma_50_100_ch7
+t-3step_high_gamma_50_100_ch8
+t-3step_broad_high_gamma_50_150_ch1
+t-3step_broad_high_gamma_50_150_ch2
+t-3step_broad_high_gamma_50_150_ch3
+t-3step_broad_high_gamma_50_150_ch4
+t-3step_broad_high_gamma_50_150_ch5
+t-3step_broad_high_gamma_50_150_ch6
+t-3step_broad_high_gamma_50_150_ch7
+t-3step_broad_high_gamma_50_150_ch8
+t-2step_beta_13_30_ch1
+t-2step_beta_13_30_ch2
+t-2step_beta_13_30_ch3
+t-2step_beta_13_30_ch4
+t-2step_beta_13_30_ch5
+t-2step_beta_13_30_ch6
+t-2step_beta_13_30_ch7
+t-2step_beta_13_30_ch8
+t-2step_low_gamma_30_50_ch1
+t-2step_low_gamma_30_50_ch2
+t-2step_low_gamma_30_50_ch3
+t-2step_low_gamma_30_50_ch4
+t-2step_low_gamma_30_50_ch5
+t-2step_low_gamma_30_50_ch6
+t-2step_low_gamma_30_50_ch7
+t-2step_low_gamma_30_50_ch8
+t-2step_high_gamma_50_100_ch1
+t-2step_high_gamma_50_100_ch2
+t-2step_high_gamma_50_100_ch3
+t-2step_high_gamma_50_100_ch4
+t-2step_high_gamma_50_100_ch5
+t-2step_high_gamma_50_100_ch6
+t-2step_high_gamma_50_100_ch7
+t-2step_high_gamma_50_100_ch8
+t-2step_broad_high_gamma_50_150_ch1
+t-2step_broad_high_gamma_50_150_ch2
+t-2step_broad_high_gamma_50_150_ch3
+t-2step_broad_high_gamma_50_150_ch4
+t-2step_broad_high_gamma_50_150_ch5
+t-2step_broad_high_gamma_50_150_ch6
+t-2step_broad_high_gamma_50_150_ch7
+t-2step_broad_high_gamma_50_150_ch8
+t-1step_beta_13_30_ch1
+t-1step_beta_13_30_ch2
+t-1step_beta_13_30_ch3
+t-1step_beta_13_30_ch4
+t-1step_beta_13_30_ch5
+t-1step_beta_13_30_ch6
+t-1step_beta_13_30_ch7
+t-1step_beta_13_30_ch8
+t-1step_low_gamma_30_50_ch1
+t-1step_low_gamma_30_50_ch2
+t-1step_low_gamma_30_50_ch3
+t-1step_low_gamma_30_50_ch4
+t-1step_low_gamma_30_50_ch5
+t-1step_low_gamma_30_50_ch6
+t-1step_low_gamma_30_50_ch7
+t-1step_low_gamma_30_50_ch8
+t-1step_high_gamma_50_100_ch1
+t-1step_high_gamma_50_100_ch2
+t-1step_high_gamma_50_100_ch3
+t-1step_high_gamma_50_100_ch4
+t-1step_high_gamma_50_100_ch5
+t-1step_high_gamma_50_100_ch6
+t-1step_high_gamma_50_100_ch7
+t-1step_high_gamma_50_100_ch8
+t-1step_broad_high_gamma_50_150_ch1
+t-1step_broad_high_gamma_50_150_ch2
+t-1step_broad_high_gamma_50_150_ch3
+t-1step_broad_high_gamma_50_150_ch4
+t-1step_broad_high_gamma_50_150_ch5
+t-1step_broad_high_gamma_50_150_ch6
+t-1step_broad_high_gamma_50_150_ch7
+t-1step_broad_high_gamma_50_150_ch8
+t-0step_beta_13_30_ch1
+t-0step_beta_13_30_ch2
+t-0step_beta_13_30_ch3
+t-0step_beta_13_30_ch4
+t-0step_beta_13_30_ch5
+t-0step_beta_13_30_ch6
+t-0step_beta_13_30_ch7
+t-0step_beta_13_30_ch8
+t-0step_low_gamma_30_50_ch1
+t-0step_low_gamma_30_50_ch2
+t-0step_low_gamma_30_50_ch3
+t-0step_low_gamma_30_50_ch4
+t-0step_low_gamma_30_50_ch5
+t-0step_low_gamma_30_50_ch6
+t-0step_low_gamma_30_50_ch7
+t-0step_low_gamma_30_50_ch8
+t-0step_high_gamma_50_100_ch1
+t-0step_high_gamma_50_100_ch2
+t-0step_high_gamma_50_100_ch3
+t-0step_high_gamma_50_100_ch4
+t-0step_high_gamma_50_100_ch5
+t-0step_high_gamma_50_100_ch6
+t-0step_high_gamma_50_100_ch7
+t-0step_high_gamma_50_100_ch8
+t-0step_broad_high_gamma_50_150_ch1
+t-0step_broad_high_gamma_50_150_ch2
+t-0step_broad_high_gamma_50_150_ch3
+t-0step_broad_high_gamma_50_150_ch4
+t-0step_broad_high_gamma_50_150_ch5
+t-0step_broad_high_gamma_50_150_ch6
+t-0step_broad_high_gamma_50_150_ch7
+t-0step_broad_high_gamma_50_150_ch8
